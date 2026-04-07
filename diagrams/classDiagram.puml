@@ -1,0 +1,40 @@
+@startuml SISTEMA DE NOTAS
+
+class Student {
+  - name: str
+  - grades: dict[str, list[float]]
+  - finalGrades: dict[str, float]
+  - average: float
+  + addGrade(subjectName: str, period: int, grade: float, periodCount: int): None
+  + calculateFinalGrade(subjectName: str): float
+  + calculateAverage(): float
+}
+
+class Subject {
+  - name: str
+}
+
+class GradeSystem {
+  - students: list[Student]
+  - subjects: list[Subject]
+  - periodCount: int
+  - courseAverage: float
+  - failedByPeriod: dict[int, int]
+  - failedFinal: int
+  - approvalPercentage: float
+  - failurePercentage: float
+  + registerPeriods(): None
+  + registerSubjects(): None
+  + registerStudents(): None
+  + requestGrades(): None
+  + calculateFinalGrades(): None
+  + calculateCourseAverage(): float
+  + calculateStatistics(): None
+  + displayData(): None
+}
+
+GradeSystem "1" --> "*" Student
+GradeSystem "1" --> "*" Subject
+Student --> Subject
+
+@enduml
