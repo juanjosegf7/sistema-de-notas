@@ -25,4 +25,4 @@ python main.py
 
 ## DIAGRAMA UML
 
-diagrams/classDiagram.png
+![Diagrama UML](diagrams/classDiagram.png)
