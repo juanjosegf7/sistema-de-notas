@@ -14,7 +14,7 @@ class Student:
         grade: float,
         periodCount: int,
     ) -> None:
-        "Guarda la nota en el periodo correspondiente."
+        "Guarda la nota en el periodo correspondiente usando un vector de periodos."
         if subjectName not in self.grades:
             self.grades[subjectName] = [0.0] * periodCount
 

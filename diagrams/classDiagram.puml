@@ -12,6 +12,7 @@ class Student {
 
 class Subject {
   - name: str
+  + __str__(): str
 }
 
 class GradeSystem {
@@ -23,11 +24,17 @@ class GradeSystem {
   - failedFinal: int
   - approvalPercentage: float
   - failurePercentage: float
+  - studentAveragesVector: list[float]
+  - failedByPeriodVector: list[int]
+  - finalGradesMatrix: list[list[float]]
   + registerPeriods(): None
   + registerSubjects(): None
   + registerStudents(): None
   + requestGrades(): None
   + calculateFinalGrades(): None
+  + buildStudentAveragesVector(): list[float]
+  + buildFailedByPeriodVector(): list[int]
+  + buildFinalGradesMatrix(): list[list[float]]
   + calculateCourseAverage(): float
   + calculateStatistics(): None
   + displayData(): None
@@ -38,12 +45,10 @@ class Validator {
   + requestText(message: str): str
   + requestGrade(message: str): float
   + getEquivalentLetter(grade: float): str
-  + buildLetterWithSign(grade: float): str
+  + buildLetterWithSign(grade: float, rangeStart: float, rangeEnd: float, letter: str): str
 }
 
 GradeSystem "1" --> "*" Student
 GradeSystem "1" --> "*" Subject
-Student --> Subject
 GradeSystem ..> Validator
-
 @enduml

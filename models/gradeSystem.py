@@ -9,7 +9,7 @@ from utils.validators import (
 
 
 class GradeSystem:
-    "Gestiona estudiantes, materias, periodos y notas."
+    "Gestiona estudiantes, materias, periodos, vectores y matrices de notas."
 
     def __init__(self):
         self.students: list[Student] = []
@@ -20,6 +20,9 @@ class GradeSystem:
         self.failedFinal: int = 0
         self.approvalPercentage: float = 0.0
         self.failurePercentage: float = 0.0
+        self.studentAveragesVector: list[float] = []
+        self.failedByPeriodVector: list[int] = []
+        self.finalGradesMatrix: list[list[float]] = []
 
     def registerPeriods(self) -> None:
         "Solicita la cantidad de periodos (mínimo 3)."
@@ -80,19 +83,33 @@ class GradeSystem:
                 student.calculateFinalGrade(subject.name)
             student.calculateAverage()
 
+    def buildStudentAveragesVector(self) -> list[float]:
+        "Construye un vector con los promedios individuales de los estudiantes."
+        self.studentAveragesVector = [student.average for student in self.students]
+        return self.studentAveragesVector
+
+    def buildFailedByPeriodVector(self) -> list[int]:
+        "Construye un vector con la cantidad de reprobados por cada periodo."
+        self.failedByPeriodVector = [
+            self.failedByPeriod.get(period, 0)
+            for period in range(1, self.periodCount + 1)
+        ]
+        return self.failedByPeriodVector
+
+    def buildFinalGradesMatrix(self) -> list[list[float]]:
+        "Construye una matriz de definitivas: filas=estudiantes, columnas=materias."
+        self.finalGradesMatrix = [
+            [student.finalGrades.get(subject.name, 0.0) for subject in self.subjects]
+            for student in self.students
+        ]
+        return self.finalGradesMatrix
+
     def calculateCourseAverage(self) -> float:
-        "Calcula el promedio general del curso."
-        total = 0.0
-        count = 0
+        "Calcula el promedio general del curso usando el vector de promedios."
+        averages = self.buildStudentAveragesVector()
 
-        for student in self.students:
-            for subject in self.subjects:
-                if subject.name in student.finalGrades:
-                    total += student.finalGrades[subject.name]
-                    count += 1
-
-        if count > 0:
-            self.courseAverage = total / count
+        if len(averages) > 0:
+            self.courseAverage = sum(averages) / len(averages)
         else:
             self.courseAverage = 0.0
 
@@ -129,6 +146,9 @@ class GradeSystem:
             self.approvalPercentage = 0.0
             self.failurePercentage = 0.0
 
+        self.buildFailedByPeriodVector()
+        self.buildFinalGradesMatrix()
+
     def displayData(self) -> None:
         "Muestra los datos registrados y las salidas solicitadas."
         print("\n*** RESULTADOS DEL SISTEMA ***")
@@ -163,3 +183,13 @@ class GradeSystem:
         print(f"\nCantidad de reprobados en definitiva: {self.failedFinal}")
         print(f"Porcentaje de aprobación: {self.approvalPercentage:.2f}%")
         print(f"Porcentaje de desaprobación: {self.failurePercentage:.2f}%")
+
+        print("\nVector de promedios individuales:")
+        print(self.studentAveragesVector)
+
+        print("\nVector de reprobados por periodo:")
+        print(self.failedByPeriodVector)
+
+        print("\nMatriz de definitivas (filas=estudiantes, columnas=materias):")
+        for index, row in enumerate(self.finalGradesMatrix, start=1):
+            print(f"- Estudiante {index}: {row}")
