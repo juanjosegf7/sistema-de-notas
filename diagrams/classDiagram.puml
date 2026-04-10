@@ -33,8 +33,17 @@ class GradeSystem {
   + displayData(): None
 }
 
+class Validator {
+  + requestInteger(message: str): int
+  + requestText(message: str): str
+  + requestGrade(message: str): float
+  + getEquivalentLetter(grade: float): str
+  + buildLetterWithSign(grade: float): str
+}
+
 GradeSystem "1" --> "*" Student
 GradeSystem "1" --> "*" Subject
 Student --> Subject
+GradeSystem ..> Validator
 
 @enduml

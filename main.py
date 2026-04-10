@@ -9,6 +9,9 @@ def main() -> None:
     system.registerSubjects()
     system.registerStudents()
     system.requestGrades()
+    system.calculateFinalGrades()
+    system.calculateCourseAverage()
+    system.calculateStatistics()
     system.displayData()
 
 
